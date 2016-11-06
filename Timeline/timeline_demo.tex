@@ -1,0 +1,432 @@
+\documentclass[]{beamer}%handout
+\usepackage[french,british]{babel}
+\usetheme[compress]{Singapore} % Compress, for horizontal bullets of subsections
+\setbeamertemplate{navigation symbols}{}  % Get rid of navigation  symbols 
+
+\usefonttheme{serif}
+\usepackage[T1]{fontenc}
+\usepackage{verbatim}
+\usepackage[pages=some]{background}
+\backgroundsetup{
+    pages=some,
+    placement=top,
+    angle=45,
+    scale=1,
+    contents=\raisebox{-1.5cm}{ADVANCED},
+    opacity=0.5
+}
+
+% CALCULATIONS
+\usepackage{calc, calculator} 
+\usepackage[nomessages]{fp}
+
+% IFTHENELSE
+\usepackage{ifthen}
+
+% COLORS, LINKS, IMAGES
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.7}
+\hypersetup{
+     colorlinks   = true,
+     citecolor    = darkblue,
+     linkcolor    = darkblue,
+     filecolor     = darkblue,
+     urlcolor     = darkblue 
+}     
+
+% PATHS
+\IfFileExists{/Users/pmxal9/Dropbox/Logos/RxPz.jpg}{
+	\def\pathbase{/Users/pmxal9/} 	% Lab computer
+}{	
+	\def\pathbase{/Users/pmaal/} 	% Personal computer
+}
+\edef\drop{\pathbase Dropbox/}		% Dropbox: shared between computers
+\input{\drop pathsForLaTeXFiles.tex} % Collection of folder names used regularly
+
+% LOGOS
+\edef\logoRux{\drop Logos/RxPz.jpg}
+\edef\logoIHR{\drop Logos/ihr.png}
+\edef\logoPerso{\drop Logos/Logo.jpg}
+\edef\logoNotts{\drop Logos/notts.png}
+
+% TITLEPAGE
+\def\myname{Al Levity}
+\def\mylittlename{Levity}
+\def\mytitle{A bi-color timeline: projection and achievement}
+\def\myemail{Allevity@gmail.com}
+\def\mydate{}
+\title[\mytitle]{\small{}\\
+	\small{\textsc{\mytitle}\\[5mm]}
+}
+\author[\mylittlename]{
+	\raisebox{0.1cm}{
+	\includegraphics[height=1.1cm]{\logoRux}}
+	\includegraphics[height=1.3cm]{\logoPerso}  \\[6mm] 
+	\textcolor{gray}{\small{\myemail}} \vspace{-10mm} 
+}
+\date{\small{\textcolor{gray}{\mydate}}}
+
+% TOC
+\setcounter{tocdepth}{1} 
+
+% BIBLIOGRAPHY 
+\bibliographystyle{alpha}
+
+% FUNCTIONS
+\newcommand\numdays[3]{% Calculate number of days since first January of year 0
+	\FPset\y{#1}%
+	\FPset\m{#2}%
+	\FPset\d{#3}%
+	\FPmul\ry{\y}{365}%
+	\FPmul\rm{\m}{30} % Could do a switch with months...
+	\FPmul\rd{\d}{1}%
+	\FPadd\rone{\ry}{\rm}%
+	\FPadd\r{\rone}{\rd}%
+	\r%
+}
+
+\def\datebegin{\numdays{2013}{01}{01}}
+\def\dateend{\numdays{2016}{10}{25}}
+\def\datenow{\datebegin}
+
+\newcommand\datesty[1]{ \tiny{\textcolor{blue!45!white}{#1}} }
+\def\proptimewin{0.02} % need to be defined; to be changed between slides
+\def\proptimenextwin{0.002}
+\usebackgroundtemplate{% Add timeline to the template, as a function of 
+	% \proptimenextwin and \proptimewin that should be updated (float between 0 and 1).
+	\tikz{
+		\draw[rounded corners=3pt, blue!10!white, fill] (0,4.4) rectangle (\proptimenextwin*\paperwidth-0.5,4.6);
+		\draw[rounded corners=3pt, blue!20!white, fill] (0,4.4) rectangle (\proptimewin*\paperwidth-0.5,4.6);
+		\draw[rounded corners=3pt, blue] (0,4.4) rectangle (\paperwidth-0.5,4.6);
+		\node[anchor=north] (20130101) at (0.4,4.7) {\datesty{2013}};
+		\node[anchor=north] (20170101) at (\paperwidth-11.3,4.7) {\datesty{2017}};		
+	}
+}
+
+
+%%% QQUOTE
+\newcommand\qquote[3]{{#1, \textit{#2}} \cite{#3}} 
+\newcommand\qquotetiny[3]{\qquote{\tiny{#1}}{\tiny{#2}}{#3}} 
+
+%%% SKILLS
+\newcommand\Skills{\textit{\textbf{Sing a Song}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TASK AND QUESTIONTASK COMMANDS %%%
+\newcommand\task[1]{%
+	\ifthenelse{#1=1}{D'abord... D'abord, Y'a l'aîné, lui qu'est comme un melon}{}
+	\ifthenelse{#1=2}{Lui qu'a un gros nez, Vu qui sais plus son nom, Monsieur}{}
+	\ifthenelse{#1=3}{Tellement qui boit, Tellement qu'il a bu, Qui fait rien de ses dix doigts}{}
+	\ifthenelse{#1=4}{Mais lui qui n'en peut plus, Lui qu'est complètement cuit, Et qui se prend pour le roi}{}
+	\ifthenelse{#1=5}{Qui se saoûle toutes les nuits, Avec du mauvais vin, Mais qu'on retrouve matin, Dans l'Église qui roupille}{}
+}
+
+\newcommand\questiontask[1]{
+	\begin{block}{Questions} 
+	\begin{itemize} 
+	\ifthenelse{#1=1}{%
+		\item Chanson d'automne}{}
+	\ifthenelse{#1=2}{%
+		\item Les sanglots longs Des violons De l'automne
+		\item Blessent mon coeur
+		\item D'une langueur Monotone.}{}
+	\ifthenelse{#1=3}{%
+		\item Tout suffocant Et blême, quand
+		\item Sonne l'heure, Je me souviens
+		\item Des jours anciens Et je pleure}{}
+	\ifthenelse{#1=4}{%
+		\item Et je m'en vais Au vent mauvais
+		\item Qui m'emporte Deçà, delà,
+		\item Pareil à la Feuille morte.}{}
+	\end{itemize}
+	\end{block}
+}
+
+\newcommand\answertask[1]{
+	\begin{block}{Answers} 
+	\begin{itemize} 
+	\ifthenelse{#1=1}{%
+		\item Dans les plis sinueux des vieilles capitales,
+		\item Où tout, même l'horreur, tourne aux enchantements,}{}
+	\ifthenelse{#1=2}{%
+		\item Je guette, obéissant à mes humeurs fatales,
+		\item Des êtres singuliers, décrépits et charmants.
+		\item Ces monstres disloqués furent jadis des femmes,
+		\item Eponine ou Laïs! Monstres brisés, bossus
+		\item Ou tordus, aimons-les! ce sont encor des âmes.
+		\item Sous des jupons troués et sous de froids tissus}{}
+	\ifthenelse{#1=3}{%
+		\item Ils rampent, flagellés par les bises iniques,
+		\item Frémissant au fracas roulant des omnibus,
+		\item Et serrant sur leur flanc, ainsi que des reliques,
+		\item Un petit sac brodé de fleurs ou de rébus;}{}
+	\ifthenelse{#1=4}{%
+		\item Ils trottent, tout pareils à des marionnettes;
+		\item Se traînent, comme font les animaux blessés,
+		\item Ou dansent, sans vouloir danser, pauvres sonnettes
+		\item Où se pend un Démon sans pitié! Tout cassés}{}
+	\end{itemize}
+	\end{block}
+}
+
+\newcommand\frameskilltask[1]{
+	\begin{frame}{\task{#1}}
+		\skilltask{#1}
+	\end{frame}
+}
+
+\newcommand\framequestionanswer[1]{
+	\begin{frame}{\task{#1}}
+		\questiontask{#1}
+		\pause
+		\answertask{#1}
+	\end{frame}
+}
+
+\newcommand\skilltask[1]{
+	\Skills:\\
+	\begin{itemize}
+	\ifthenelse{#1=-1}{%
+		\item Il était un 
+		\item petit
+		\item navire
+		\item il était un petit navire}{}
+	\ifthenelse{#1=666}{%
+		\item qui n'avait ja-ja-jamais navigué
+		\item qui n'avait ja-ja-jamais navigué ohé ohé}{}
+	\ifthenelse{#1=0}{%
+		\item Ohé ohé ohé ohé matelot
+		\item Matelot navigue sur les flots
+		\item Ohé ohé ohé ohé matelot
+		\item Matelot navigue sur les flots.}{}
+	\ifthenelse{#1=1}{%
+		\item Il entreprit un long voyage
+		\item Il entreprit un long voyage
+		\item Sur la mer Mé-Mé-Méditerranée
+		\item Sur la mer Mé-Mé-Méditerranée.
+		\item Ohé ohé}{}
+	\ifthenelse{#1=2}{%
+		\item Au bout de cinq à six semaines
+		\item Au bout de cinq à six semaines
+		\item Les vivres vin-vin-vinrent à manquer
+		\item Les vivres vin-vin-vinrent à manquer.}{}
+	\ifthenelse{#1=3}{%
+		\item On tira-z-à la courte paille
+		\item On tira-z-à la courte paille
+		\item Pour savoir qui-qui-qui serait mangé
+		\item Pour savoir qui-qui-qui serait mangé.
+		\item Ohé ohé}{}
+	\ifthenelse{#1=4}{%
+		\item L'un voulait qu'on le mît à frire
+		\item L'un\ voulait qu'on le mît à frire
+		\item L'autre voulait-lait-lait le fricasser
+		\item L'autre voulait-lait-lait le fricasser.
+		\item Ohé ohé}{}
+	\end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\begin{document}
+
+
+% First frame
+\setbeamertemplate{footline}{} %no foot line on this page
+\frame[noframenumbering]{\titlepage} % Don't count this slide
+
+% Footlines: current page only
+\setbeamertemplate{footline}{\hfill\raisebox{2mm}[0pt][0pt]{\insertframenumber}\hspace*{2mm}} 
+\beamertemplatenavigationsymbolsempty
+
+% TOC
+%\frame{\tableofcontents}
+
+% Reset Headline style
+\setbeamertemplate{headline}
+ {%
+  \begin{beamercolorbox}{section in head/foot}
+  \insertsectionnavigationhorizontal{\textwidth}{}{}
+  \end{beamercolorbox}%
+}
+
+
+%%% TALK 
+
+\begin{frame}{Paroles, Paroles, Paroles}\begin{itemize}
+\item Sing with me\\[3mm] 
+\item Singing in the rain\\[3mm] 
+\item \Skills
+\end{itemize}
+\end{frame}
+
+
+%%% TASK -1
+\def\proptimenextwin{0.03} %PROPTIMENEXTWIN
+
+
+\begin{frame}{il repassera par là}
+\begin{itemize}
+\item il est passé par ici
+\end{itemize}
+\end{frame}
+
+\edef\proptimewin{\proptimenextwin} % PROPTIMEWIN 0.03
+
+\begin{frame}{Lyrics}
+\skilltask{-1}
+\end{frame}
+
+%%% TASK 666 %%%%
+
+
+\edef\proptimewin{\proptimenextwin} % PROPTIMEWIN 
+\edef\proptimenextwin{0.07} %PROPTIMENEXTWIN
+
+\begin{frame}{}
+\skilltask{666}
+\end{frame}
+
+
+%%% TASK 0 %%%%
+\edef\proptimewin{\proptimenextwin} % PROPTIMEWIN 
+\edef\proptimenextwin{0.12} %PROPTIMENEXTWIN
+
+
+\begin{frame}{Georges Brassens}
+\begin{itemize}
+\item C'est à travers de larges grilles,
+\item Que les femelles du canton,
+\item Contemplaient un puissant gorille,
+\item Sans souci du qu'en-dira-t-on ;
+\item Avec impudeur, ces commères
+\item Lorgnaient même un endroit précis
+\item Que, rigoureusement, ma mère
+\item M'a défendu d? nommer ici.
+\item Gare au gorille !...
+\end{itemize}
+\end{frame}
+
+\edef\proptimewin{\proptimenextwin} % PROPTIMEWIN 
+
+\begin{frame}{José-Maria de HEREDIA   (1842-1905)}
+\skilltask{0}
+\end{frame}
+
+\begin{frame}{Les conquérants}
+Comme un vol de gerfauts hors du charnier natal,\\
+Fatigués de porter leurs misères hautaines,\\
+De Palos de Moguer, routiers et capitaines\\
+Partaient, ivres d'un rêve héroïque et brutal.
+\end{frame}
+
+\begin{frame}{Les conquérants}
+Ils allaient conquérir le fabuleux métal\\
+Que Cipango mûrit dans ses mines lointaines,\\
+Et les vents alizés inclinaient leurs antennes\\
+Aux bords mystérieux du monde Occidental.
+\end{frame}
+
+
+%%% TASK 1  %%%%
+\edef\proptimewin{\proptimenextwin} % PROPTIMEWIN 
+\edef\proptimenextwin{0.28} %PROPTIMENEXTWIN
+
+
+\begin{frame}{\task{1}}
+\questiontask{1}
+\end{frame}
+
+\def\proptimewin{0.17} % PROPTIMEWIN
+
+\framequestionanswer{1}
+\frameskilltask{1}
+
+
+%%% TASK 2 %%%%
+\edef\proptimenextwin{0.7}  %PROPTIMENEXTWIN
+
+
+\begin{frame}{\task{2}}
+\questiontask{2}
+\end{frame}
+
+\def\proptimewin{0.43} % PROPTIMEWIN
+
+\begin{frame}
+\begin{block}{Hit the road}
+Jack
+\end{block}
+\end{frame}
+
+\def\proptimewin{0.65} % PROPTIMEWIN
+
+\begin{frame}
+\begin{block}{Tu auras tant de choses à voir}
+Pour franchir \only<1>{la frontière}\only<2>{du savoir,}\\
+\only<1>{Recueillir l'héritage\\}
+\only<2>{Qui vient du fond des âges,\\}
+Dans l'harmonie d'une chaîne d'amour !
+\end{block}
+\end{frame}
+
+\def\proptimewin{0.7} % PROPTIMEWIN
+
+\framequestionanswer{2}
+\frameskilltask{2}
+
+\def\proptimewin{0.90} % PROPTIMEWIN
+
+\begin{frame}
+C'est l'histoire de la vie
+\end{frame}
+
+\def\proptimewin{0.92} % PROPTIMEWIN
+
+\framequestionanswer{3}
+\frameskilltask{3}
+
+
+%%%% TASK 4 %%%%
+\def\proptimenextwin{0.94} %PROPTIMENEXTWIN
+
+\begin{frame}{\task{4}}
+\begin{block}{Le cycle éternel}
+Qu'un enfant béni\\
+Rend immortel.
+\end{block}
+\end{frame}
+
+\def\proptimewin{0.96} % PROPTIMEWIN
+
+\framequestionanswer{4}
+\frameskilltask{4}
+
+
+%%%% SUMMARY %%%%
+\def\proptimenextwin{0.999} %PROPTIMENEXTWIN
+
+\begin{frame}{Summary}
+\foreach \i in {1,2,3,4,5} {\task{\i}\\}
+\noindent\\[8mm] 
+La ronde infinie\\
+De ce cycle éternel,\\
+C'est l'histoire,\\
+L'Histoire de la Vie !
+\end{frame}
+
+\def\proptimewin{0.005} % PROPTIMEWIN
+\def\proptimewin{0.999} % PROPTIMEWIN
+
+%%%% BIBLIOGRAPHY
+\begin{frame}[allowframebreaks]{References}
+\bibliography{\Thesis MyLibrary}
+This and that
+\end{frame}
+
+
+\end{document}
